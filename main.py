@@ -212,7 +212,7 @@ for _, row in hitters.iterrows():
 
     pitcher_info = pitchers.get(opponent, None)
 
-    if pitcher_info and pitcher_info["id"] != -1":
+    if pitcher_info and pitcher_info["id"] != -1:
     pitcher_stats = get_pitcher_details(pitcher_info["id"])
     hand = pitcher_stats["hand"]
     era = pitcher_stats["era"]
