@@ -3,6 +3,27 @@ import pandas as pd
 import requests
 import datetime
 
+from pybaseball import batting_stats
+
+@st.cache_data
+def get_fantasy_stats():
+    import datetime
+    year = datetime.date.today().year
+    stats = batting_stats(year)
+    stats["Name"] = stats["Name"].str.strip()
+    return stats
+def calculate_fantasy_points(row):
+    TB = row.get("TB", 0)
+    BB = row.get("BB", 0)
+    R = row.get("R", 0)
+    RBI = row.get("RBI", 0)
+    SB = row.get("SB", 0)
+    K = row.get("SO", 0)  # Strikeouts
+
+    # Cycle is not tracked in public stats, so skipping that
+
+    return TB + BB + R + RBI + SB - K
+    
 def score_matchup(era, hand):
     if era is None:
         return "❓ Unknown ERA — watch closely"
@@ -196,9 +217,25 @@ for _, row in hitters.iterrows():
         hand = pitcher_stats["hand"]
         era = pitcher_stats["era"]
         score = score_matchup(era, hand)
-        display = f"{name} ({team}) vs {opponent} — {pitcher_stats['name']} ({hand}HP, {era} ERA) → {score}"
-    else:
-        display = f"{name} ({team}) vs {opponent} — Unknown Pitcher → ❓ No recommendation"
+        # Load season fantasy stats
+        fantasy_stats = get_fantasy_stats()
+
+        # Find player’s row
+        stat_row = fantasy_stats[fantasy_stats["Name"] == name]
+
+        if not stat_row.empty:
+            pts = calculate_fantasy_points(stat_row.iloc[0])
+            games = stat_row.iloc[0].get("G", 1)
+            fppg = round(pts / games, 2)
+        else:
+            fppg = "N/A"
+        
+     display = (
+            f"{name} ({team}) vs {opponent} — {pitcher_stats['name']} "
+            f"({hand}HP, {era} ERA) → {score} | FPPG: {fppg}"
+        )      
+            else:
+            display = f"{name} ({team}) vs {opponent} — Unknown Pitcher → ❓ No recommendation"
 
     st.write(display)
 
