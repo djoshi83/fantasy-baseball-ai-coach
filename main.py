@@ -11,7 +11,7 @@ def get_probable_pitchers(date_str: str):
     ...
 
     url = f"https://statsapi.mlb.com/api/v1/schedule?sportId=1&date={formatted_date}&hydrate=probablePitcher"
-url = f"https://statsapi.mlb.com/api/v1/schedule?sportId=1&date={date_str}&hydrate=probablePitcher"
+    url = f"https://statsapi.mlb.com/api/v1/schedule?sportId=1&date={date_str}&hydrate=probablePitcher"
     response = requests.get(url)
     data = response.json()
 
