@@ -46,6 +46,17 @@ def get_opponent_team(team_name, schedule_data):
             elif team_name == away:
                 return home
     return "Unknown"
+# @st.cache_data
+# def get_pitcher_details(pitcher_id: int):
+ #   url = f"https://statsapi.mlb.com/api/v1/people/{pitcher_id}?hydrate=stats(group=[pitching],type=[season])"
+#    response = requests.get(url)
+ #   data = response.json()
+
+#    person = data.get("people", [{}])[0]
+#    name = person.get("fullName", "Unknown")
+#    hand = person.get("pitchHand", {}).get("abbreviation", "?")
+#    st.text(f"{name}: hand = {hand}")
+#    era = None
 @st.cache_data
 def get_pitcher_details(pitcher_id: int):
     url = f"https://statsapi.mlb.com/api/v1/people/{pitcher_id}?hydrate=stats(group=[pitching],type=[season])"
@@ -53,11 +64,7 @@ def get_pitcher_details(pitcher_id: int):
     data = response.json()
 
     person = data.get("people", [{}])[0]
-    name = person.get("fullName", "Unknown")
-    hand = person.get("pitchHand", {}).get("abbreviation", "?")
-    st.text(f"{name}: hand = {hand}")
-    era = None
-
+    st.json(person)  # 👈 NEW: print full structure to debug
     for stat in person.get("stats", []):
         for split in stat.get("splits", []):
             era = split.get("stat", {}).get("era", None)
