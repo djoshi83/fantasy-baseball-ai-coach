@@ -1,6 +1,34 @@
 import streamlit as st
 import pandas as pd
+import requests
+import datetime
 
+@st.cache_data
+def get_probable_pitchers():
+    today = datetime.datetime.today().strftime('%Y-%m-%d')
+    url = f"https://statsapi.mlb.com/api/v1/schedule?sportId=1&date={today}&hydrate=probablePitcher"
+    response = requests.get(url)
+    data = response.json()
+
+    pitcher_lookup = {}
+
+    for date_info in data.get("dates", []):
+        for game in date_info.get("games", []):
+            teams = game.get("teams", {})
+
+            # Home team
+            home_team = teams["home"]["team"]["name"]
+            home_pitcher = teams["home"].get("probablePitcher", {})
+            if home_pitcher:
+                pitcher_lookup[home_team] = home_pitcher.get("fullName", "Unknown")
+
+            # Away team
+            away_team = teams["away"]["team"]["name"]
+            away_pitcher = teams["away"].get("probablePitcher", {})
+            if away_pitcher:
+                pitcher_lookup[away_team] = away_pitcher.get("fullName", "Unknown")
+
+    return pitcher_lookup
 st.title("Fantasy Baseball AI Agent")
 st.write("This tool helps you decide who to start and sit based on daily matchups.")
 
@@ -25,7 +53,12 @@ st.subheader("⚾ Your Pitchers")
 for _, row in pitchers.iterrows():
     st.write(f"{row['Name']} — {', '.join(row['Eligible_Positions'])} ({row['Team']})")
 
+# --- Display today's probable pitchers ---
+st.subheader("🎯 Today's Probable Pitchers")
+pitchers = get_probable_pitchers()
 
+for team, pitcher_name in pitchers.items():
+    st.write(f"{team}: {pitcher_name}")
 # ==============================
 # 🔒 Original Replit Logic Below
 # ==============================
