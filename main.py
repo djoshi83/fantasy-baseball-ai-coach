@@ -30,7 +30,7 @@ for _, row in pitchers.iterrows():
 # 🔒 Original Replit Logic Below
 # ==============================
 
-"""
+# """
 # import requests
 # import datetime
 
@@ -72,5 +72,5 @@ for _, row in pitchers.iterrows():
 #     display_roster()
 #     pitchers = get_probable_pitchers()
 #     print(pitchers)
-"""
+# """
 
