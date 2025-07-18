@@ -54,7 +54,7 @@ for _, row in pitchers.iterrows():
     st.write(f"{row['Name']} — {', '.join(row['Eligible_Positions'])} ({row['Team']})")
 
 # --- Display today's probable pitchers ---
-st.subheader("🎯 Today's Probable Pitchers")
+st.subheader("🎯 Next Scheduled Probable Pitchers")
 pitchers = get_probable_pitchers()
 
 for team, pitcher_name in pitchers.items():
