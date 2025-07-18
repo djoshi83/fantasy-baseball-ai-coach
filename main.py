@@ -6,8 +6,10 @@ import datetime
 selected_date = st.date_input("Choose a date", datetime.date.today())
 formatted_date = str(selected_date)
 
-@st.cache_data
-def get_probable_pitchers():
+@st.cache_data(show_spinner=False)
+def get_probable_pitchers(date_str: str):
+    ...
+
     url = f"https://statsapi.mlb.com/api/v1/schedule?sportId=1&date={formatted_date}&hydrate=probablePitcher"
     url = f"https://statsapi.mlb.com/api/v1/schedule?sportId=1&date={today}&hydrate=probablePitcher"
     response = requests.get(url)
