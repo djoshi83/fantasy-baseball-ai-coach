@@ -55,6 +55,7 @@ def get_pitcher_details(pitcher_id: int):
     person = data.get("people", [{}])[0]
     name = person.get("fullName", "Unknown")
     hand = person.get("pitchHand", {}).get("abbreviation", "?")
+    st.text(f"{name}: hand = {hand}")
     era = None
 
     for stat in person.get("stats", []):
