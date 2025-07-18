@@ -3,6 +3,39 @@ import pandas as pd
 import requests
 import datetime
 
+TEAM_NAME_MAP = {
+    "ARI": "Arizona Diamondbacks",
+    "ATL": "Atlanta Braves",
+    "BAL": "Baltimore Orioles",
+    "BOS": "Boston Red Sox",
+    "CHC": "Chicago Cubs",
+    "CHW": "Chicago White Sox",
+    "CIN": "Cincinnati Reds",
+    "CLE": "Cleveland Guardians",
+    "COL": "Colorado Rockies",
+    "DET": "Detroit Tigers",
+    "HOU": "Houston Astros",
+    "KC":  "Kansas City Royals",
+    "LAA": "Los Angeles Angels",
+    "LAD": "Los Angeles Dodgers",
+    "MIA": "Miami Marlins",
+    "MIL": "Milwaukee Brewers",
+    "MIN": "Minnesota Twins",
+    "NYM": "New York Mets",
+    "NYY": "New York Yankees",
+    "OAK": "Oakland Athletics",
+    "PHI": "Philadelphia Phillies",
+    "PIT": "Pittsburgh Pirates",
+    "SD":  "San Diego Padres",
+    "SEA": "Seattle Mariners",
+    "SF":  "San Francisco Giants",
+    "STL": "St. Louis Cardinals",
+    "TB":  "Tampa Bay Rays",
+    "TEX": "Texas Rangers",
+    "TOR": "Toronto Blue Jays",
+    "WSH": "Washington Nationals"
+}
+
 def get_opponent_team(team_name, schedule_data):
     for date_info in schedule_data.get("dates", []):
         for game in date_info.get("games", []):
@@ -87,7 +120,8 @@ st.subheader("🧠 Matchups: Your Hitters vs Opposing Pitchers")
 for _, row in hitters.iterrows():
     team = row["Team"]
     name = row["Name"]
-    opponent = get_opponent_team(team, schedule_data)
+    full_team_name = TEAM_NAME_MAP.get(team, "Unknown")
+    opponent = get_opponent_team(full_team_name, schedule_data)
     pitcher = pitchers.get(opponent, "Unknown")
     st.write(f"{name} ({team}) is facing {opponent} — {pitcher}")
 
