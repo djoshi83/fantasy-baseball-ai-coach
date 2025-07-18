@@ -35,11 +35,11 @@ def get_probable_pitchers(date_str: str):
 
     return pitcher_lookup
     # 🚀 Pull and display pitchers
-st.subheader("🎯 Probable Pitchers")
-pitchers = get_probable_pitchers(formatted_date)
+#st.subheader("🎯 Probable Pitchers")
+#pitchers = get_probable_pitchers(formatted_date)
 
-for team, pitcher_name in pitchers.items():
-    st.write(f"{team}: {pitcher_name}")
+#for team, pitcher_name in pitchers.items():
+#    st.write(f"{team}: {pitcher_name}")
 st.title("Fantasy Baseball AI Agent")
 st.write("This tool helps you decide who to start and sit based on daily matchups.")
 
