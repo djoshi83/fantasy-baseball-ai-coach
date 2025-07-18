@@ -154,13 +154,13 @@ for _, row in pitchers.iterrows():
 
 # --- Display today's probable pitchers ---
 st.subheader("🎯 Probable Pitchers")
-# pitchers, schedule_data = get_probable_pitchers(formatted_date)
 
 for team, pitcher_data in pitchers.items():
-    st.write(f"{team}: {pitcher_data['name']}")
+    if isinstance(pitcher_data, dict) and "name" in pitcher_data:
+        st.write(f"{team}: {pitcher_data['name']}")
+    else:
+        st.write(f"{team}: {pitcher_data}")
 
-#for team, pitcher_name in pitchers.items():
-#    st.write(f"{team}: {pitcher_name}")
 
 st.subheader("🧠 Matchups: Your Hitters vs Opposing Pitchers")
 for _, row in hitters.iterrows():
