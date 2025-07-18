@@ -220,7 +220,7 @@ for _, row in hitters.iterrows():
         score = score_matchup(era, hand)
 
         # Pull hitter season stats
-        stat_row = fantasy_stats[fantasy_stats["Name"] == name]
+        stat_row = fantasy_stats[fantasy_stats["Name"].str.lower().str.replace(".", "").str.strip() == name.lower().replace("í", "i").replace(".", "").strip()]
         if not stat_row.empty:
             pts = calculate_fantasy_points(stat_row.iloc[0])
             games = stat_row.iloc[0].get("G", 1)
