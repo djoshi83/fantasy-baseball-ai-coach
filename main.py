@@ -184,6 +184,7 @@ hitters, pitchers = load_roster()
 
 # --- Display hitters ---
 st.subheader("📋 Your Hitters")
+fantasy_stats = get_fantasy_stats()
 for _, row in hitters.iterrows():
     st.write(f"{row['Name']} — {', '.join(row['Eligible_Positions'])} ({row['Team']})")
 
