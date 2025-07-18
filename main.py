@@ -212,30 +212,27 @@ for _, row in hitters.iterrows():
 
     pitcher_info = pitchers.get(opponent, None)
 
-    if pitcher_info and pitcher_info["id"] != -1:
-        pitcher_stats = get_pitcher_details(pitcher_info["id"])
-        hand = pitcher_stats["hand"]
-        era = pitcher_stats["era"]
-        score = score_matchup(era, hand)
-        # Load season fantasy stats
-        fantasy_stats = get_fantasy_stats()
+    if pitcher_info and pitcher_info["id"] != -1":
+    pitcher_stats = get_pitcher_details(pitcher_info["id"])
+    hand = pitcher_stats["hand"]
+    era = pitcher_stats["era"]
+    score = score_matchup(era, hand)
 
-        # Find player’s row
-        stat_row = fantasy_stats[fantasy_stats["Name"] == name]
+    stat_row = fantasy_stats[fantasy_stats["Name"] == name]
+    if not stat_row.empty:
+        pts = calculate_fantasy_points(stat_row.iloc[0])
+        games = stat_row.iloc[0].get("G", 1)
+        fppg = round(pts / games, 2)
+    else:
+        fppg = "N/A"
 
-        if not stat_row.empty:
-            pts = calculate_fantasy_points(stat_row.iloc[0])
-            games = stat_row.iloc[0].get("G", 1)
-            fppg = round(pts / games, 2)
-        else:
-            fppg = "N/A"
-        
-     display = (
-            f"{name} ({team}) vs {opponent} — {pitcher_stats['name']} "
-            f"({hand}HP, {era} ERA) → {score} | FPPG: {fppg}"
-        )      
-            else:
-            display = f"{name} ({team}) vs {opponent} — Unknown Pitcher → ❓ No recommendation"
+    display = (
+        f"{name} ({team}) vs {opponent} — {pitcher_stats['name']} "
+        f"({hand}HP, {era} ERA) → {score} | FPPG: {fppg}"
+    )
+
+    else:
+    display = f"{name} ({team}) vs {opponent} — Unknown Pitcher → ❓ No recommendation"
 
     st.write(display)
 
