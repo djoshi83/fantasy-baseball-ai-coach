@@ -218,20 +218,22 @@ for _, row in hitters.iterrows():
         era = pitcher_stats["era"]
         score = score_matchup(era, hand)
 
-    stat_row = fantasy_stats[fantasy_stats["Name"] == name]
-    if not stat_row.empty:
-        pts = calculate_fantasy_points(stat_row.iloc[0])
-        games = stat_row.iloc[0].get("G", 1)
-        fppg = round(pts / games, 2)
-    else:
-        fppg = "N/A"
+        # Pull hitter season stats
+        stat_row = fantasy_stats[fantasy_stats["Name"] == name]
+        if not stat_row.empty:
+            pts = calculate_fantasy_points(stat_row.iloc[0])
+            games = stat_row.iloc[0].get("G", 1)
+            fppg = round(pts / games, 2)
+        else:
+            fppg = "N/A"
 
-    display = (
-        f"{name} ({team}) vs {opponent} — {pitcher_stats['name']} "
-        f"({hand}HP, {era} ERA) → {score} | FPPG: {fppg}"
-    )
+        display = (
+            f"{name} ({team}) vs {opponent} — {pitcher_stats['name']} "
+            f"({hand}HP, {era} ERA) → {score} | FPPG: {fppg}"
+        )
+
     else:
-    display = f"{name} ({team}) vs {opponent} — Unknown Pitcher → ❓ No recommendation"
+        display = f"{name} ({team}) vs {opponent} — Unknown Pitcher → ❓ No recommendation"
 
     st.write(display)
 
