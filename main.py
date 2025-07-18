@@ -64,7 +64,13 @@ def get_pitcher_details(pitcher_id: int):
     data = response.json()
 
     person = data.get("people", [{}])[0]
-    st.json(person)  # 👈 NEW: print full structure to debug
+    name = person.get("fullName", "Unknown")
+
+    # ✅ Correct way to pull hand (we now know it's "code")
+    hand = person.get("pitchHand", {}).get("code", "?")
+
+    # ERA handling (already working)
+    era = None
     for stat in person.get("stats", []):
         for split in stat.get("splits", []):
             era = split.get("stat", {}).get("era", None)
@@ -75,6 +81,7 @@ def get_pitcher_details(pitcher_id: int):
         "hand": hand,
         "era": era
     }
+
 
 selected_date = st.date_input("Choose a date", datetime.date.today())
 formatted_date = str(selected_date)
