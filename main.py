@@ -81,6 +81,16 @@ pitchers, schedule_data = get_probable_pitchers(formatted_date)
 
 for team, pitcher_name in pitchers.items():
     st.write(f"{team}: {pitcher_name}")
+
+st.subheader("🧠 Matchups: Your Hitters vs Opposing Pitchers")
+
+for _, row in hitters.iterrows():
+    team = row["Team"]
+    name = row["Name"]
+    opponent = get_opponent_team(team, schedule_data)
+    pitcher = pitchers.get(opponent, "Unknown")
+    st.write(f"{name} ({team}) is facing {opponent} — {pitcher}")
+
 # ==============================
 # 🔒 Original Replit Logic Below
 # ==============================
