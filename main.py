@@ -230,7 +230,6 @@ for _, row in hitters.iterrows():
         f"{name} ({team}) vs {opponent} — {pitcher_stats['name']} "
         f"({hand}HP, {era} ERA) → {score} | FPPG: {fppg}"
     )
-
     else:
     display = f"{name} ({team}) vs {opponent} — Unknown Pitcher → ❓ No recommendation"
 
