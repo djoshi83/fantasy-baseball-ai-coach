@@ -1,4 +1,7 @@
+import streamlit as st
 
+st.title("Fantasy Baseball AI Agent")
+st.write("Welcome to your start/sit optimizer — live MLB data coming soon.")
 import pandas as pd
 import requests
 import datetime
