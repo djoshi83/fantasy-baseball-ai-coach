@@ -65,7 +65,7 @@ for _, row in pitchers.iterrows():
 
 # --- Display today's probable pitchers ---
 st.subheader("🎯 Next Scheduled Probable Pitchers")
-pitchers = get_probable_pitchers()
+pitchers = get_probable_pitchers(formatted_date)
 
 for team, pitcher_name in pitchers.items():
     st.write(f"{team}: {pitcher_name}")
