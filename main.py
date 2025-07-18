@@ -13,17 +13,21 @@ def get_fantasy_stats():
     stats["Name"] = stats["Name"].str.strip()
     return stats
 def calculate_fantasy_points(row):
-    TB = row.get("TB", 0)
+    # Recalculate Total Bases manually
+    TB = (
+        row.get("1B", 0) * 1 +
+        row.get("2B", 0) * 2 +
+        row.get("3B", 0) * 3 +
+        row.get("HR", 0) * 4
+    )
     BB = row.get("BB", 0)
     R = row.get("R", 0)
     RBI = row.get("RBI", 0)
     SB = row.get("SB", 0)
-    K = row.get("SO", 0)  # Strikeouts
-
-    # Cycle is not tracked in public stats, so skipping that
+    K = row.get("SO", 0)
 
     return TB + BB + R + RBI + SB - K
-    
+
 def score_matchup(era, hand):
     if era is None:
         return "❓ Unknown ERA — watch closely"
