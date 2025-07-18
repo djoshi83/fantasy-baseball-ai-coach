@@ -153,11 +153,14 @@ for _, row in pitchers.iterrows():
     st.write(f"{row['Name']} — {', '.join(row['Eligible_Positions'])} ({row['Team']})")
 
 # --- Display today's probable pitchers ---
-st.subheader("🎯 Next Scheduled Probable Pitchers")
-pitchers, schedule_data = get_probable_pitchers(formatted_date)
+st.subheader("🎯 Probable Pitchers")
+# pitchers, schedule_data = get_probable_pitchers(formatted_date)
 
-for team, pitcher_name in pitchers.items():
-    st.write(f"{team}: {pitcher_name}")
+for team, pitcher_data in pitchers.items():
+    st.write(f"{team}: {pitcher_data['name']}")
+
+#for team, pitcher_name in pitchers.items():
+#    st.write(f"{team}: {pitcher_name}")
 
 st.subheader("🧠 Matchups: Your Hitters vs Opposing Pitchers")
 for _, row in hitters.iterrows():
