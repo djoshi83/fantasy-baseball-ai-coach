@@ -3,6 +3,25 @@ import pandas as pd
 import requests
 import datetime
 
+def score_matchup(era, hand):
+    if era is None:
+        return "❓ Unknown ERA — watch closely"
+
+    try:
+        era = float(era)
+    except:
+        return "❓ Invalid ERA"
+
+    if era >= 5.00:
+        return "✅ Strong Start"
+    elif era >= 4.00:
+        return "✅ Start"
+    elif era >= 3.00:
+        return "⚠️ Risky"
+    else:
+        return "⛔️ Bench — Tough matchup"
+
+
 TEAM_NAME_MAP = {
     "ARI": "Arizona Diamondbacks",
     "ATL": "Atlanta Braves",
@@ -163,6 +182,7 @@ for team, pitcher_info in pitchers.items():
 
 
 st.subheader("🧠 Matchups: Your Hitters vs Opposing Pitchers")
+
 for _, row in hitters.iterrows():
     team = row["Team"]
     name = row["Name"]
@@ -173,11 +193,15 @@ for _, row in hitters.iterrows():
 
     if pitcher_info and pitcher_info["id"] != -1:
         pitcher_stats = get_pitcher_details(pitcher_info["id"])
-        display = f"{name} ({team}) is facing {opponent} — {pitcher_stats['name']} ({pitcher_stats['hand']}HP, {pitcher_stats['era']} ERA)"
+        hand = pitcher_stats["hand"]
+        era = pitcher_stats["era"]
+        score = score_matchup(era, hand)
+        display = f"{name} ({team}) vs {opponent} — {pitcher_stats['name']} ({hand}HP, {era} ERA) → {score}"
     else:
-        display = f"{name} ({team}) is facing {opponent} — Unknown Pitcher"
+        display = f"{name} ({team}) vs {opponent} — Unknown Pitcher → ❓ No recommendation"
 
     st.write(display)
+
 
 
 # ==============================
