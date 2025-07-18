@@ -4,7 +4,7 @@ import requests
 import datetime
 
 selected_date = st.date_input("Choose a date", datetime.date.today())
-formatted_date = selected_date.strftime('%Y-%m-%d')
+formatted_date = str(selected_date)
 
 @st.cache_data
 def get_probable_pitchers():
