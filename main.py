@@ -46,6 +46,27 @@ def get_opponent_team(team_name, schedule_data):
             elif team_name == away:
                 return home
     return "Unknown"
+@st.cache_data
+def get_pitcher_details(pitcher_id: int):
+    url = f"https://statsapi.mlb.com/api/v1/people/{pitcher_id}?hydrate=stats(group=[pitching],type=[season])"
+    response = requests.get(url)
+    data = response.json()
+
+    person = data.get("people", [{}])[0]
+    name = person.get("fullName", "Unknown")
+    hand = person.get("pitchHand", {}).get("abbreviation", "?")
+    era = None
+
+    for stat in person.get("stats", []):
+        for split in stat.get("splits", []):
+            era = split.get("stat", {}).get("era", None)
+            break
+
+    return {
+        "name": name,
+        "hand": hand,
+        "era": era
+    }
 
 selected_date = st.date_input("Choose a date", datetime.date.today())
 formatted_date = str(selected_date)
@@ -69,13 +90,21 @@ def get_probable_pitchers(date_str: str):
             home_team = teams["home"]["team"]["name"]
             home_pitcher = teams["home"].get("probablePitcher", {})
             if home_pitcher:
-                pitcher_lookup[home_team] = home_pitcher.get("fullName", "Unknown")
+                pitcher_lookup[home_team] = {
+                "name": home_pitcher.get("fullName", "Unknown"),
+                "id": home_pitcher.get("id", -1)
+}
+
 
             # Away team
             away_team = teams["away"]["team"]["name"]
             away_pitcher = teams["away"].get("probablePitcher", {})
             if away_pitcher:
-                pitcher_lookup[away_team] = away_pitcher.get("fullName", "Unknown")
+                pitcher_lookup[away_team] = {
+                "name": away_pitcher.get("fullName", "Unknown"),
+                "id": away_pitcher.get("id", -1)
+}
+
 
     return pitcher_lookup, data
     # 🚀 Pull and display pitchers
@@ -116,14 +145,22 @@ for team, pitcher_name in pitchers.items():
     st.write(f"{team}: {pitcher_name}")
 
 st.subheader("🧠 Matchups: Your Hitters vs Opposing Pitchers")
-
 for _, row in hitters.iterrows():
     team = row["Team"]
     name = row["Name"]
     full_team_name = TEAM_NAME_MAP.get(team, "Unknown")
     opponent = get_opponent_team(full_team_name, schedule_data)
-    pitcher = pitchers.get(opponent, "Unknown")
-    st.write(f"{name} ({team}) is facing {opponent} — {pitcher}")
+
+    pitcher_info = pitchers.get(opponent, None)
+
+    if pitcher_info and pitcher_info["id"] != -1:
+        pitcher_stats = get_pitcher_details(pitcher_info["id"])
+        display = f"{name} ({team}) is facing {opponent} — {pitcher_stats['name']} ({pitcher_stats['hand']}HP, {pitcher_stats['era']} ERA)"
+    else:
+        display = f"{name} ({team}) is facing {opponent} — Unknown Pitcher"
+
+    st.write(display)
+
 
 # ==============================
 # 🔒 Original Replit Logic Below
