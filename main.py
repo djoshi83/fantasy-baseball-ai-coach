@@ -3,9 +3,12 @@ import pandas as pd
 import requests
 import datetime
 
+selected_date = st.date_input("Choose a date", datetime.date.today())
+formatted_date = selected_date.strftime('%Y-%m-%d')
+
 @st.cache_data
 def get_probable_pitchers():
-    today = datetime.datetime.today().strftime('%Y-%m-%d')
+    url = f"https://statsapi.mlb.com/api/v1/schedule?sportId=1&date={formatted_date}&hydrate=probablePitcher"
     url = f"https://statsapi.mlb.com/api/v1/schedule?sportId=1&date={today}&hydrate=probablePitcher"
     response = requests.get(url)
     data = response.json()
@@ -29,6 +32,11 @@ def get_probable_pitchers():
                 pitcher_lookup[away_team] = away_pitcher.get("fullName", "Unknown")
 
     return pitcher_lookup
+    # 🚀 Pull and display pitchers
+st.subheader("🎯 Probable Pitchers")
+pitchers = get_probable_pitchers(formatted_date)
+for team, pitcher_name in pitchers.items():
+    st.write(f"{team}: {pitcher_name}")
 st.title("Fantasy Baseball AI Agent")
 st.write("This tool helps you decide who to start and sit based on daily matchups.")
 
