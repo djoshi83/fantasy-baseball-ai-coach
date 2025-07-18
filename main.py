@@ -124,7 +124,7 @@ def get_probable_pitchers(date_str: str):
     return pitcher_lookup, data
     # 🚀 Pull and display pitchers
 #st.subheader("🎯 Probable Pitchers")
-#pitchers = get_probable_pitchers(formatted_date)
+#pitchers, schedule_data = get_probable_pitchers(formatted_date)
 
 #for team, pitcher_name in pitchers.items():
 #    st.write(f"{team}: {pitcher_name}")
@@ -154,12 +154,12 @@ for _, row in pitchers.iterrows():
 
 # --- Display today's probable pitchers ---
 st.subheader("🎯 Probable Pitchers")
-
-for team, pitcher_data in pitchers.items():
-    if isinstance(pitcher_data, dict) and "name" in pitcher_data:
-        st.write(f"{team}: {pitcher_data['name']}")
+pitchers, schedule_data = get_probable_pitchers(formatted_date)
+for team, pitcher_info in pitchers.items():
+    if isinstance(pitcher_info, dict) and "name" in pitcher_info:
+        st.write(f"{team}: {pitcher_info['name']}")
     else:
-        st.write(f"{team}: {pitcher_data}")
+        st.write(f"{team}: {pitcher_info}")
 
 
 st.subheader("🧠 Matchups: Your Hitters vs Opposing Pitchers")
