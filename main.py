@@ -3,6 +3,17 @@ import pandas as pd
 import requests
 import datetime
 
+def get_opponent_team(team_name, schedule_data):
+    for date_info in schedule_data.get("dates", []):
+        for game in date_info.get("games", []):
+            home = game["teams"]["home"]["team"]["name"]
+            away = game["teams"]["away"]["team"]["name"]
+            if team_name == home:
+                return away
+            elif team_name == away:
+                return home
+    return "Unknown"
+
 selected_date = st.date_input("Choose a date", datetime.date.today())
 formatted_date = str(selected_date)
 
@@ -33,7 +44,7 @@ def get_probable_pitchers(date_str: str):
             if away_pitcher:
                 pitcher_lookup[away_team] = away_pitcher.get("fullName", "Unknown")
 
-    return pitcher_lookup
+    return pitcher_lookup, data
     # 🚀 Pull and display pitchers
 #st.subheader("🎯 Probable Pitchers")
 #pitchers = get_probable_pitchers(formatted_date)
